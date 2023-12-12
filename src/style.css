@@ -143,7 +143,7 @@ header {
     background-position-y: 25px;
     background-position-x: 125px;
     background-repeat: no-repeat;
-    background-image: url(../../assets/images/Bg/background.png);
+    background-image: url(assets/images/Bg/background.png);
 }
 
 .hero {

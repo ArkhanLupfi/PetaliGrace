@@ -47,6 +47,8 @@ document.addEventListener('DOMContentLoaded', async function () {
             iconPath = getIconPath2('sun');
         } else if (await isPathExist(getIconPath3('sun'))) {
             iconPath = getIconPath3('sun');
+        } else if (await isPathExist(getIconPath4('sun'))) {
+            iconPath = getIconPath4('sun');
         } else {
             iconPath = getDefaultIconPath();
         }
@@ -75,6 +77,8 @@ document.addEventListener('DOMContentLoaded', async function () {
             iconPath = getIconPath2('moon');
         } else if (await isPathExist(getIconPath3('moon'))) {
             iconPath = getIconPath3('moon');
+        } else if (await isPathExist(getIconPath4('moon'))) {
+            iconPath = getIconPath4('moon');
         } else {
             iconPath = getDefaultIconPath();
         }
@@ -91,17 +95,22 @@ document.addEventListener('DOMContentLoaded', async function () {
 
     // Fungsi untuk mendapatkan path ikon dengan tingkat direktori relatif
     function getIconPath(iconName) {
-        return `../../assets/icons/${iconName}.png`;
+        return `assets/icons/${iconName}.png`;
     }
 
     // Fungsi untuk mendapatkan path ikon dengan tingkat direktori lebih tinggi
     function getIconPath2(iconName2) {
-        return `../../../assets/icons/${iconName2}.png`;
+        return `../../assets/icons/${iconName2}.png`;
     }
 
     // Fungsi untuk mendapatkan path ikon dengan tingkat direktori lebih tinggi lagi
     function getIconPath3(iconName3) {
-        return `../../../../assets/icons/${iconName3}.png`;
+        return `../../../assets/icons/${iconName3}.png`;
+    }
+
+    // Fungsi untuk mendapatkan path ikon dengan tingkat direktori lebih tinggi lagi
+    function getIconPath4(iconName4) {
+        return `../../../../assets/icons/${iconName4}.png`;
     }
 
     // Fungsi untuk mengubah path gambar mode gelap
