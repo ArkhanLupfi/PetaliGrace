@@ -1,16 +1,12 @@
-// Ketika dokumen HTML selesai dimuat
-document.addEventListener('DOMContentLoaded', function () {
-    // Mendapatkan referensi ke elemen body, ikon bulan, dan semua gambar pada kategori
+document.addEventListener('DOMContentLoaded', async function () {
     const body = document.body;
     const moonIcon = document.querySelector('.moon-icon');
     const dataImages = document.querySelectorAll('.Data .Category img');
 
-    // Memeriksa apakah mode gelap telah diaktifkan sebelumnya
     if (localStorage.getItem('dark-mode') === 'enabled') {
         enableDarkMode();
     }
 
-    // Menambahkan event listener untuk mengaktifkan atau menonaktifkan mode gelap saat ikon bulan diklik
     moonIcon.addEventListener('click', function () {
         if (body.classList.contains('dark-mode')) {
             disableDarkMode();
@@ -20,12 +16,11 @@ document.addEventListener('DOMContentLoaded', function () {
     });
 
     // Fungsi untuk memeriksa apakah path gambar valid
-    function isPathExist(path) {
+    async function isPathExist(path) {
         const img = new Image();
         img.src = path;
 
         return new Promise((resolve) => {
-            // Menggunakan Promise untuk menangani asynchronicity saat memuat gambar
             img.onload = () => {
                 // Gambar berhasil dimuat
                 resolve(true);
@@ -43,16 +38,27 @@ document.addEventListener('DOMContentLoaded', function () {
         body.classList.add('dark-mode');
         localStorage.setItem('dark-mode', 'enabled');
 
-        // Mengganti ikon matahari menjadi ikon bulan
-        const iconPath = await isPathExist(getIconPath('sun')) ? getIconPath('sun') : getIconPath2('sun');
+        // Mendapatkan path ikon dengan validasi
+        let iconPath;
+
+        if (await isPathExist(getIconPath('sun'))) {
+            iconPath = getIconPath('sun');
+        } else if (await isPathExist(getIconPath2('sun'))) {
+            iconPath = getIconPath2('sun');
+        } else if (await isPathExist(getIconPath3('sun'))) {
+            iconPath = getIconPath3('sun');
+        } else {
+            iconPath = getDefaultIconPath();
+        }
+
         moonIcon.src = iconPath;
 
         // Mengganti sumber gambar untuk mode gelap
-        dataImages.forEach(async (image) => {
+        for (const image of dataImages) {
             const currentSrc = image.src;
             const newSrc = await isPathExist(getDarkModeSrc(currentSrc)) ? getDarkModeSrc(currentSrc) : getNormalModeSrc(currentSrc);
             image.src = newSrc;
-        });
+        }
     }
 
     // Fungsi untuk menonaktifkan mode gelap
@@ -60,16 +66,27 @@ document.addEventListener('DOMContentLoaded', function () {
         body.classList.remove('dark-mode');
         localStorage.setItem('dark-mode', null);
 
-        // Mengganti ikon bulan menjadi ikon matahari
-        const iconPath = await isPathExist(getIconPath('moon')) ? getIconPath('moon') : getIconPath2('moon');
+        // Mendapatkan path ikon dengan validasi
+        let iconPath;
+
+        if (await isPathExist(getIconPath('moon'))) {
+            iconPath = getIconPath('moon');
+        } else if (await isPathExist(getIconPath2('moon'))) {
+            iconPath = getIconPath2('moon');
+        } else if (await isPathExist(getIconPath3('moon'))) {
+            iconPath = getIconPath3('moon');
+        } else {
+            iconPath = getDefaultIconPath();
+        }
+
         moonIcon.src = iconPath;
 
         // Mengembalikan sumber gambar ke mode normal
-        dataImages.forEach(async (image) => {
+        for (const image of dataImages) {
             const currentSrc = image.src;
             const newSrc = await isPathExist(getNormalModeSrc(currentSrc)) ? getNormalModeSrc(currentSrc) : getDarkModeSrc(currentSrc);
             image.src = newSrc;
-        });
+        }
     }
 
     // Fungsi untuk mendapatkan path ikon dengan tingkat direktori relatif
@@ -80,6 +97,11 @@ document.addEventListener('DOMContentLoaded', function () {
     // Fungsi untuk mendapatkan path ikon dengan tingkat direktori lebih tinggi
     function getIconPath2(iconName2) {
         return `../../../assets/icons/${iconName2}.png`;
+    }
+
+    // Fungsi untuk mendapatkan path ikon dengan tingkat direktori lebih tinggi lagi
+    function getIconPath3(iconName3) {
+        return `../../../../assets/icons/${iconName3}.png`;
     }
 
     // Fungsi untuk mengubah path gambar mode gelap
@@ -98,5 +120,10 @@ document.addEventListener('DOMContentLoaded', function () {
             .replace('flowers2.png', 'flowers.png')
             .replace('herbs2.png', 'herbs.png')
             .replace('poisonivy2.png', 'poisonivy.png');
+    }
+
+    // Fungsi untuk mendapatkan path ikon default
+    function getDefaultIconPath() {
+        return 'path/to/default/icon.png';
     }
 });
