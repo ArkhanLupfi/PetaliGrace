@@ -1,12 +1,17 @@
 document.addEventListener('DOMContentLoaded', async function () {
+    // Mendapatkan referensi ke elemen body dan ikon moon
     const body = document.body;
     const moonIcon = document.querySelector('.moon-icon');
+
+    // Mendapatkan referensi ke elemen gambar dalam kategori data
     const dataImages = document.querySelectorAll('.Data .Category img');
 
+    // Memeriksa apakah mode gelap sudah diaktifkan sebelumnya
     if (localStorage.getItem('dark-mode') === 'enabled') {
         enableDarkMode();
     }
 
+    // Menambahkan event listener untuk mengganti mode gelap saat ikon moon di-klik
     moonIcon.addEventListener('click', function () {
         if (body.classList.contains('dark-mode')) {
             disableDarkMode();
@@ -35,12 +40,12 @@ document.addEventListener('DOMContentLoaded', async function () {
 
     // Fungsi untuk mengaktifkan mode gelap
     async function enableDarkMode() {
+        // Menambahkan class 'dark-mode' ke elemen body dan menyimpan status di local storage
         body.classList.add('dark-mode');
         localStorage.setItem('dark-mode', 'enabled');
 
         // Mendapatkan path ikon dengan validasi
         let iconPath;
-
         if (await isPathExist(getIconPath('sun'))) {
             iconPath = getIconPath('sun');
         } else if (await isPathExist(getIconPath2('sun'))) {
@@ -53,9 +58,10 @@ document.addEventListener('DOMContentLoaded', async function () {
             iconPath = getDefaultIconPath();
         }
 
+        // Mengganti sumber gambar ikon moon
         moonIcon.src = iconPath;
 
-        // Mengganti sumber gambar untuk mode gelap
+        // Mengganti sumber gambar untuk mode gelap di setiap elemen kategori data
         for (const image of dataImages) {
             const currentSrc = image.src;
             const newSrc = await isPathExist(getDarkModeSrc(currentSrc)) ? getDarkModeSrc(currentSrc) : getNormalModeSrc(currentSrc);
@@ -65,12 +71,12 @@ document.addEventListener('DOMContentLoaded', async function () {
 
     // Fungsi untuk menonaktifkan mode gelap
     async function disableDarkMode() {
+        // Menghapus class 'dark-mode' dari elemen body dan menyimpan status di local storage
         body.classList.remove('dark-mode');
         localStorage.setItem('dark-mode', null);
 
         // Mendapatkan path ikon dengan validasi
         let iconPath;
-
         if (await isPathExist(getIconPath('moon'))) {
             iconPath = getIconPath('moon');
         } else if (await isPathExist(getIconPath2('moon'))) {
@@ -83,9 +89,10 @@ document.addEventListener('DOMContentLoaded', async function () {
             iconPath = getDefaultIconPath();
         }
 
+        // Mengganti sumber gambar ikon moon
         moonIcon.src = iconPath;
 
-        // Mengembalikan sumber gambar ke mode normal
+        // Mengembalikan sumber gambar ke mode normal di setiap elemen kategori data
         for (const image of dataImages) {
             const currentSrc = image.src;
             const newSrc = await isPathExist(getNormalModeSrc(currentSrc)) ? getNormalModeSrc(currentSrc) : getDarkModeSrc(currentSrc);
